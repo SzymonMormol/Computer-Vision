@@ -15,8 +15,8 @@ hands = mpHands.Hands()
 mpDraw = mp.solutions.drawing_utils
 cx8,cy8,cx4,cy4 = 0,0,0,0
 devices = AudioUtilities.GetSpeakers()
-#interface = devices.Activate(IAudioEndpointVolume._iid_,comtypes.CLSTX_ALL,None)
 volume = devices.EndpointVolume.QueryInterface(IAudioEndpointVolume)
+
 
 while(1):
 
@@ -51,8 +51,6 @@ while(1):
                             cv2.circle(frame,(midx,midy),10,(255,0,0),cv2.FILLED)
                         else:
                             cv2.circle(frame,(midx,midy),10,(255,255,0),cv2.FILLED)
-            
-                        cv2.putText(frame,str(int(distance)),(20,20),1,1,(255,0,255),3)
                         power = -65.0 + distance/3.68
                         if(power>0):
                             power = 0
