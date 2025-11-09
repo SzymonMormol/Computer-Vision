@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import cv2 
 import mediapipe as mp
 from google.protobuf.json_format import MessageToDict
-
+import math
 
 cap = cv2.VideoCapture(0)
 cap.set(3,1280)
@@ -21,6 +21,8 @@ temp_height = 0
 cursorCx = 0
 cursorCy = 0
 Color = (255,0,255)
+
+Click_cx,Click_cy = 0,0
 
 CX,CY,W,H = 100,100,200,200
 
@@ -58,6 +60,9 @@ while(1):
                             rectTopY=cy-40
                             cursorCy =cy
                             cursorCx = cx
+                        if id == 12:
+                            Click_cx = cx
+                            Click_cy = cy
                         if id == 20:
                             rectTopX = cx+100
 
@@ -65,6 +70,7 @@ while(1):
                             cv2.rectangle(img,(rectBotX,rectBotY),(rectTopX,temp_height),(0,255,0),3)
                         else:
                             cv2.rectangle(img,(rectBotX,rectBotY),(rectTopX,rectTopY),(0,255,0),3)
+                            
             elif label == 'Left':
                 for handlms in results.multi_hand_landmarks:
                     mpDraw.draw_landmarks(img,handlms,mpHands.HAND_CONNECTIONS)
@@ -83,7 +89,9 @@ while(1):
                             rectTopY=cy-10
                             cursorCy =cy
                             cursorCx = cx
-
+                        if id==12:
+                            Click_cx = cx
+                            Click_cy = cy
                         if id == 20:
                             rectTopX = cx-100
 
@@ -91,8 +99,10 @@ while(1):
                             cv2.rectangle(img,(rectBotX,rectBotY),(rectTopX,temp_height),(0,255,0),3)
                         else:
                             cv2.rectangle(img,(rectBotX,rectBotY),(rectTopX,rectTopY),(0,255,0),3)
-
-            if(CX-W//2<cursorCx<CX+W//2 and CY-H//2 < cursorCy  < CY+H//2):
+    
+            clickDistance = math.sqrt(pow((cursorCx-Click_cx),2)+pow((cursorCy-Click_cy),2))
+            print(clickDistance)
+            if(CX-W//2<cursorCx<CX+W//2 and CY-H//2 < cursorCy  < CY+H//2 and clickDistance <40):
                 Color=(0,0,0)
                 CX = cursorCx
                 CY = cursorCy
